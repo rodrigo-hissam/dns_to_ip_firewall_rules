@@ -59,12 +59,12 @@ for domain in dynamic_domains:
     if os.path.isfile(domain):
         old_ip = get_logged_ip(domain)
         if not current_ip == old_ip:
-            print("Adding {} to firewall".format(current_ip))
+            print("Adding {} to firewall - TODO".format(current_ip))
             create_hostname_ip_log(domain, current_ip)
         else:
             print("Same ip address nothing to do")
     else:
         create_hostname_ip_log(domain, current_ip)
-        print("Adding to firewall")
+        print("Adding to firewall - TODO")
 
     print("{0} - {1} \n".format(domain, current_ip))
