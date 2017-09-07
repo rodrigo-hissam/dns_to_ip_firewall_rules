@@ -46,7 +46,7 @@ def main():
 
     # Variables
     # Example domain names, use your set your configured dynamic dns names here
-    dynamic_domains = ["mangolassi.it", "google.com", "ceed.ax.lt"]
+    dynamic_domains = ["mangolassi.it", "google.com", "wordpress.com"]
     distro = linux_distribution()[0]
 
     # Script start
