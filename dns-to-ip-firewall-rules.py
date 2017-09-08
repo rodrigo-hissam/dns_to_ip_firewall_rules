@@ -1,20 +1,20 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 """Dynamic dns to ip address firewall rule creator.
 
 Resolve dynamic dns names into ips and automatically create/destroy
-firewall rules. Write access in the directory where the script will reside is
-necesarry in order to log the resolved domains ip address.
+firewall rules. Script requires to run as super user in order to be able to
+create the firewall rules.
 
 
 Requirements:
-    The following packages should be installed before attempting to run the
-    script
+    The following packages should be installed and enabled before attempting to
+    run the script
 
     Fedora based:
-        'bind-utils'
+        bind-utils, firewalld
 
-    Debian based:
-        'dnsutils'
+    Ubuntu based:
+        dnsutils , ufw
 
 Example:
     To manually run the script
@@ -25,6 +25,7 @@ Todo:
     * Fedora based firewall rule creation.
     * Debian firewall rule creation
     * Add cron setup instructions to automate the running of the script.
+    * Ability to set custom ports per host.
 
 Author:
     Rodrigo Hissam
@@ -43,10 +44,9 @@ from platform import linux_distribution
 # Functions
 def main():
     """Main entry point for the script."""
-
     # Variables
     # Example domain names, use your set your configured dynamic dns names here
-    dynamic_domains = ["mangolassi.it", "google.com", "wordpress.com"]
+    dynamic_domains = ["mangolassi.it", "google.com", "theverge.com"]
     distro = linux_distribution()[0]
 
     # Script start
@@ -120,4 +120,3 @@ def delete_firewall_rule(distro, ip):
 
 if __name__ == '__main__':
     sys.exit(main())
-
