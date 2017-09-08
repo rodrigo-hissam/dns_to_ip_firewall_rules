@@ -58,7 +58,11 @@ def main():
     #       (80, 'tcp')
     #       ]
     #   },
+    # Example: Allow any port and protocol for domain
+    #     {'name': 'theverge.com'},
     dynamic_domains = [
+        {'name': 'theverge.com'},
+        {'name': 'arstechnica.com'},
         {
          'name': 'google.com',
          'ports': [
@@ -91,16 +95,23 @@ def main():
         if os.path.isfile(domain['name']):
             old_ip = get_logged_ip(domain['name'])
             if not current_ip == old_ip:
-                delete_firewall_rule(distro, old_ip, domain['ports'])
-                create_firewall_rule(distro, current_ip, domain['ports'])
+                if 'ports' in domain.keys():
+                    delete_firewall_rule(distro, old_ip, domain['ports'])
+                    create_firewall_rule(distro, current_ip, domain['ports'])
+                else:
+                    delete_firewall_rule(distro, old_ip)
+                    create_firewall_rule(distro, current_ip)
                 print("\nAdding {} ip {} - removing {}".format
                       (domain['name'], current_ip, old_ip))
                 create_hostname_ip_log(domain['name'], current_ip)
             else:
                 print("\nSame ip address nothing to do")
         else:
+            if 'ports' in domain.keys():
+                create_firewall_rule(distro, current_ip, domain['ports'])
+            else:
+                create_firewall_rule(distro, current_ip)
             create_hostname_ip_log(domain['name'], current_ip)
-            create_firewall_rule(distro, current_ip, domain['ports'])
             print("\nAdding to firewall")
 
         print("{0} - {1}".format(domain['name'], current_ip))
@@ -132,38 +143,44 @@ def get_logged_ip(domain):
     return logged_ip
 
 
-def create_firewall_rule(distro, ip, ports):
+def create_firewall_rule(distro, ip, ports=None):
     """Create firewall rule based on newest ip of dynamic domain."""
     if 'Ubuntu' in distro:
-        for port in ports:
-            if port[1] == 'both':
-                Popen(
-                 ["ufw", "allow", "from", ip, "to", "any", "port",
-                 str(port[0])], stdout=PIPE, stderr=PIPE)
-            else:
-                Popen(
-                  ["ufw", "allow", "from", ip, "to", "any", "port",
-                   str(port[0]), "proto", port[1]], stdout=PIPE, stderr=PIPE)
-            # ufw freaks out when adding rules too fast
-            time.sleep(.5)
+        if ports:
+            for port in ports:
+                if port[1] == 'both':
+                    Popen(
+                     ["ufw", "allow", "from", ip, "to", "any", "port",
+                      str(port[0])], stdout=PIPE, stderr=PIPE)
+                else:
+                    Popen(
+                      ["ufw", "allow", "from", ip, "to", "any", "port",
+                       str(port[0]), "proto", port[1]], stdout=PIPE, stderr=PIPE)
+                # ufw freaks out when adding rules too fast
+                time.sleep(.5)
+        else:
+            Popen(["ufw", "allow", "from", ip], stdout=PIPE, stderr=PIPE)
     elif 'Cent' in distro or 'Fedora' in distro or 'Red' in distro:
         print("")
 
 
-def delete_firewall_rule(distro, ip, ports):
+def delete_firewall_rule(distro, ip, ports=None):
     """Delete firewall rule in order to add new ip from dynamic domain."""
     if 'Ubuntu' in distro:
-        for port in ports:
-            if port[1] == 'both':
-                Popen(
-                 ["ufw", "delete", "allow", "from", ip, "to", "any", "port",
-                  str(port[0])], stdout=PIPE, stderr=PIPE)
-            else:
-                Popen(
-                  ["ufw", "delete", "allow", "from", ip, "to", "any", "port",
-                   str(port[0]), "proto", port[1]], stdout=PIPE, stderr=PIPE)
-            # ufw freaks out when deleting rules too fast
-            time.sleep(.5)
+        if ports:
+            for port in ports:
+                if port[1] == 'both':
+                    Popen(
+                     ["ufw", "delete", "allow", "from", ip, "to", "any", "port",
+                      str(port[0])], stdout=PIPE, stderr=PIPE)
+                else:
+                    Popen(
+                      ["ufw", "delete", "allow", "from", ip, "to", "any", "port",
+                       str(port[0]), "proto", port[1]], stdout=PIPE, stderr=PIPE)
+                # ufw freaks out when deleting rules too fast
+                time.sleep(.5)
+        else:
+            Popen(["ufw", "delete", "allow", "from", ip], stdout=PIPE, stderr=PIPE)
     elif 'Cent' in distro or 'Fed' in distro or 'Red' in distro:
         print("")
 
