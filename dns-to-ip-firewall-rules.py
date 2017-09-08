@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 """Dynamic dns to ip address firewall rule creator.
 
 Resolve dynamic dns names into ips and automatically create/destroy
