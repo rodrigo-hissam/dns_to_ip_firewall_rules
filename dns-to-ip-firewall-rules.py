@@ -34,11 +34,11 @@ Author:
 import re
 import os.path
 import time
-import datetime
 import sys
 
 from subprocess import Popen, PIPE
 from platform import linux_distribution
+from datetime import datetime
 
 
 # Functions
@@ -101,21 +101,17 @@ def main():
                 else:
                     delete_firewall_rule(distro, old_ip)
                     create_firewall_rule(distro, current_ip)
-                print("\nAdding {} ip {} - removing {}".format
-                      (domain['name'], current_ip, old_ip))
+                log_script_messages(domain['name', current_ip, old_ip])
                 create_hostname_ip_log(domain['name'], current_ip)
-            else:
-                print("\nSame ip address nothing to do")
         else:
             if 'ports' in domain.keys():
                 create_firewall_rule(distro, current_ip, domain['ports'])
             else:
                 create_firewall_rule(distro, current_ip)
             create_hostname_ip_log(domain['name'], current_ip)
-            print("\nAdding to firewall")
 
-        print("{0} - {1}".format(domain['name'], current_ip))
-    print("\n")
+        log_script_messages(domain['name'], current_ip)
+
 
 
 def get_current_ip(domain):
@@ -142,6 +138,20 @@ def get_logged_ip(domain):
     file.close()
     return logged_ip
 
+
+def log_script_messages(domain, current_ip, old_ip=None):
+    """Log firewall rule creation and deletion."""
+    date_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    if old_ip:
+        file = open("dns-to-ip-firewall.log", "a")
+        file.write("{} - {} adding {} - removing {} from firewall\n".format(
+            date_time, domain, current_ip, old_ip))
+        file.close()
+    else:
+        file = open("dns-to-ip-firewall.log", "a")
+        file.write("{} Adding domain {}/{} to the firewall\n".format(
+            date_time, domain, current_ip))
+        file.close()
 
 def create_firewall_rule(distro, ip, ports=None):
     """Create firewall rule based on newest ip of dynamic domain."""
