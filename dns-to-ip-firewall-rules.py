@@ -213,8 +213,8 @@ def delete_firewall_rule(distro, ip, ports=None):
          "source address={} port port={} protocol={} accept'".format(ip,
                                                                      port[0],
                                                                      port[1]))
-        rich_rule_both =
-        ("firewall-cmd --permanent --remove-rich-rule='rule family=ipv4 "
+        rich_rule_both = (
+        "firewall-cmd --permanent --remove-rich-rule='rule family=ipv4 "
          "source address={} port port={} accept'".format(ip,  port[0]))
 
         if ports:
