@@ -165,7 +165,13 @@ def create_firewall_rule(distro, ip, ports=None):
         else:
             Popen(["ufw", "allow", "from", ip], stdout=PIPE, stderr=PIPE)
     elif 'Cent' in distro or 'Fedora' in distro or 'Red' in distro:
-        print("")
+        reload_fw = "firewall-cmd --reload"
+        if ports:
+            pass
+        else:
+            rule = "firewall-cmd --permanent --add-source={}".format(ip)
+            Popen(rule.split(' '), stdout=PIPE, sterr=PIPE)
+            Popen(reload_fw.split(' '), stdout=PIPE, stderr=PIPE)
 
 
 def delete_firewall_rule(distro, ip, ports=None):
@@ -186,7 +192,13 @@ def delete_firewall_rule(distro, ip, ports=None):
         else:
             Popen(["ufw", "delete", "allow", "from", ip], stdout=PIPE, stderr=PIPE)
     elif 'Cent' in distro or 'Fed' in distro or 'Red' in distro:
-        print("")
+        reload_fw = "firewall-cmd --reload"
+        if ports:
+            pass
+        else:
+            rule = "firewall-cmd --permanent --remove-source={}".format(ip)
+            Popen(rule.split(' '), stdout=PIPE, sterr=PIPE)
+            Popen(reload_fw.split(' '), stdout=PIPE, stderr=PIPE)
 
 
 if __name__ == '__main__':
