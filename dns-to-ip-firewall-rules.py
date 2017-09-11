@@ -101,7 +101,7 @@ def main():
                 else:
                     delete_firewall_rule(distro, old_ip)
                     create_firewall_rule(distro, current_ip)
-                log_script_messages(domain['name', current_ip, old_ip])
+                log_script_messages(domain['name'], current_ip, old_ip)
                 create_hostname_ip_log(domain['name'], current_ip)
         else:
             if 'ports' in domain.keys():
@@ -111,7 +111,6 @@ def main():
             create_hostname_ip_log(domain['name'], current_ip)
 
         log_script_messages(domain['name'], current_ip)
-
 
 
 def get_current_ip(domain):
@@ -143,15 +142,14 @@ def log_script_messages(domain, current_ip, old_ip=None):
     """Log firewall rule creation and deletion."""
     date_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if old_ip:
-        file = open("dns-to-ip-firewall.log", "a")
-        file.write("{} - {} adding {} - removing {} from firewall\n".format(
-            date_time, domain, current_ip, old_ip))
-        file.close()
+        with open("dns-to-ip-firewall.log", "a") as file:
+            file.write("{} - {} adding {} - removing {} from firewall\n".format(
+                date_time, domain, current_ip, old_ip))
+
     else:
-        file = open("dns-to-ip-firewall.log", "a")
-        file.write("{} Adding domain {}/{} to the firewall\n".format(
-            date_time, domain, current_ip))
-        file.close()
+        with open("dns-to-ip-firewall.log", "w") as file:
+            file.write("{} Adding domain {}/{} to the firewall\n".format(
+                date_time, domain, current_ip))
 
 
 def create_firewall_rule(distro, ip, ports=None):
