@@ -153,6 +153,7 @@ def log_script_messages(domain, current_ip, old_ip=None):
             date_time, domain, current_ip))
         file.close()
 
+
 def create_firewall_rule(distro, ip, ports=None):
     """Create firewall rule based on newest ip of dynamic domain."""
     if 'Ubuntu' in distro:
