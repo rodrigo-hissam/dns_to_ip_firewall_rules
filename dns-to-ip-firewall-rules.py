@@ -109,6 +109,9 @@ def main():
                 create_firewall_rule(distro, current_ip)
             create_hostname_ip_log(domain['name'], current_ip)
             log_script_messages(domain['name'], current_ip)
+    if 'Cent' in distro or 'Fedora' in distro or 'Red' in distro:
+        reload_fw = "firewall-cmd --reload"
+        Popen(reload_fw.split(' '), stdout=PIPE, stderr=PIPE)
 
 def get_current_ip(domain):
     """Return the ip after resolving 'host hostame' in the shell."""
@@ -165,15 +168,11 @@ def create_firewall_rule(distro, ip, ports=None):
         else:
             Popen(["ufw", "allow", "from", ip], stdout=PIPE, stderr=PIPE)
     elif 'Cent' in distro or 'Fedora' in distro or 'Red' in distro:
-        reload_fw = "firewall-cmd --reload"
         if ports:
             pass
         else:
             rule = "firewall-cmd --permanent --add-source={}".format(ip)
             Popen(rule.split(' '), stdout=PIPE, stderr=PIPE)
-            # Firewall won't reload if we add and reaload too fast
-            time.sleep(.5)
-            Popen(reload_fw.split(' '), stdout=PIPE, stderr=PIPE)
 
 
 def delete_firewall_rule(distro, ip, ports=None):
@@ -194,14 +193,12 @@ def delete_firewall_rule(distro, ip, ports=None):
         else:
             Popen(["ufw", "delete", "allow", "from", ip], stdout=PIPE, stderr=PIPE)
     elif 'Cent' in distro or 'Fed' in distro or 'Red' in distro:
-        reload_fw = "firewall-cmd --reload"
         if ports:
             pass
         else:
             rule = "firewall-cmd --permanent --remove-source={}".format(ip)
             Popen(rule.split(' '), stdout=PIPE, stderr=PIPE)
-            time.sleep(.5)
-            Popen(reload_fw.split(' '), stdout=PIPE, stderr=PIPE)
+
 
 
 if __name__ == '__main__':
