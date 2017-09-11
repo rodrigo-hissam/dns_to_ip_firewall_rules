@@ -170,13 +170,13 @@ def create_firewall_rule(distro, ip, ports=None):
             Popen(["ufw", "allow", "from", ip], stdout=PIPE, stderr=PIPE)
     elif 'Cent' in distro or 'Fedora' in distro or 'Red' in distro:
         simple_rule = "firewall-cmd --permanent --add-source={}".format(ip)
-        rich_rule_proto =
-        ("firewall-cmd --permanent --add-rich-rule='rule family=ipv4 "
+        rich_rule_proto = (
+         "firewall-cmd --permanent --add-rich-rule='rule family=ipv4 "
          "source address={} port port={} protocol={} accept'".format(ip,
                                                                      port[0],
                                                                      port[1]))
-        rich_rule_both =
-        ("firewall-cmd --permanent --add-rich-rule='rule family=ipv4 "
+        rich_rule_both = (
+         "firewall-cmd --permanent --add-rich-rule='rule family=ipv4 "
          "source address={} port port={} accept'".format(ip,  port[0]))
 
         if ports:
