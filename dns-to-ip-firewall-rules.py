@@ -25,7 +25,6 @@ Todo:
     * Fedora based firewall rule creation.
     * Debian firewall rule creation
     * Add cron setup instructions to automate the running of the script.
-    * Ability to set custom ports per host.
 
 Author:
     Rodrigo Hissam
