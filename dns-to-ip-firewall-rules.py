@@ -208,8 +208,8 @@ def delete_firewall_rule(distro, ip, ports=None):
             Popen(["ufw", "delete", "allow", "from", ip], stdout=PIPE, stderr=PIPE)
     elif 'Cent' in distro or 'Fed' in distro or 'Red' in distro:
         simple_rule = "firewall-cmd --permanent --remove-source={}".format(ip)
-        rich_rule_proto =
-        ("firewall-cmd --permanent --remove-rich-rule='rule family=ipv4 "
+        rich_rule_proto = (
+         "firewall-cmd --permanent --remove-rich-rule='rule family=ipv4 "
          "source address={} port port={} protocol={} accept'".format(ip,
                                                                      port[0],
                                                                      port[1]))
