@@ -170,7 +170,7 @@ def create_firewall_rule(distro, ip, ports=None):
             pass
         else:
             rule = "firewall-cmd --permanent --add-source={}".format(ip)
-            Popen(rule.split(' '), stdout=PIPE, sterr=PIPE)
+            Popen(rule.split(' '), stdout=PIPE, stderr=PIPE)
             Popen(reload_fw.split(' '), stdout=PIPE, stderr=PIPE)
 
 
