@@ -170,18 +170,19 @@ def create_firewall_rule(distro, ip, ports=None):
             Popen(["ufw", "allow", "from", ip], stdout=PIPE, stderr=PIPE)
     elif 'Cent' in distro or 'Fedora' in distro or 'Red' in distro:
         if ports:
-            rich_rule_proto = (
-             "firewall-cmd --permanent --add-rich-rule='rule family=ipv4 "
-             "source address={} port port={} protocol={} accept'".format(
-                ip, port[0], port[1]))
-            rich_rule_both = (
-             "firewall-cmd --permanent --add-rich-rule='rule family=ipv4 "
-             "source address={} port port={} accept'".format(ip,  port[0]))
             for port in ports:
                 if port[1] == 'both':
-                    Popen(rich_rule_both.split(' '), stdout=PIPE, stderr=PIPE)
+                    rule = (
+                     "firewall-cmd --permanent --add-rich-rule='rule family=ipv4 "
+                     "source address={} port port={} protocol={} accept'".format(
+                        ip, port[0], port[1]))
+
+                    Popen(rule.split(' '), stdout=PIPE, stderr=PIPE)
                 else:
-                    Popen(rich_rule_proto.split(' '), stdout=PIPE, stderr=PIPE)
+                    rule = (
+                     "firewall-cmd --permanent --add-rich-rule='rule family=ipv4 "
+                     "source address={} port port={} accept'".format(ip,  port[0]))
+                    Popen(rule.split(' '), stdout=PIPE, stderr=PIPE)
         else:
             rule = "firewall-cmd --permanent --add-source={}".format(ip)
             Popen(rule.split(' '), stdout=PIPE, stderr=PIPE)
@@ -206,18 +207,19 @@ def delete_firewall_rule(distro, ip, ports=None):
             Popen(["ufw", "delete", "allow", "from", ip], stdout=PIPE, stderr=PIPE)
     elif 'Cent' in distro or 'Fed' in distro or 'Red' in distro:
         if ports:
-            rich_rule_proto = (
-             "firewall-cmd --permanent --remove-rich-rule='rule family=ipv4 "
-             "source address={} port port={} protocol={} accept'".format(
-                ip, port[0], port[1]))
-            rich_rule_both = (
-             "firewall-cmd --permanent --remove-rich-rule='rule family=ipv4 "
-             "source address={} port port={} accept'".format(ip,  port[0]))
             for port in ports:
                 if port[1] == 'both':
-                    Popen(rich_rule_both.split(' '), stdout=PIPE, stderr=PIPE)
+                    rule = (
+                     "firewall-cmd --permanent --remove-rich-rule='rule family=ipv4 "
+                     "source address={} port port={} protocol={} accept'".format(
+                        ip, port[0], port[1]))
+
+                    Popen(rule.split(' '), stdout=PIPE, stderr=PIPE)
                 else:
-                    Popen(rich_rule_proto.split(' '), stdout=PIPE, stderr=PIPE)
+                    rule = (
+                     "firewall-cmd --permanent --remove-rich-rule='rule family=ipv4 "
+                     "source address={} port port={} accept'".format(ip,  port[0]))
+                    Popen(rule.split(' '), stdout=PIPE, stderr=PIPE)
         else:
             rule = "firewall-cmd --permanent --remove-source={}".format(ip)
             Popen(rule.split(' '), stdout=PIPE, stderr=PIPE)
