@@ -113,7 +113,6 @@ def main():
         log_script_messages(domain['name'], current_ip)
 
 
-
 def get_current_ip(domain):
     """Return the ip after resolving 'host hostame' in the shell."""
     response = Popen(["host", domain], stdout=PIPE)
