@@ -171,6 +171,8 @@ def create_firewall_rule(distro, ip, ports=None):
         else:
             rule = "firewall-cmd --permanent --add-source={}".format(ip)
             Popen(rule.split(' '), stdout=PIPE, stderr=PIPE)
+            # Firewall won't reload if we add and reaload too fast
+            time.sleep(.5)
             Popen(reload_fw.split(' '), stdout=PIPE, stderr=PIPE)
 
 
@@ -197,7 +199,8 @@ def delete_firewall_rule(distro, ip, ports=None):
             pass
         else:
             rule = "firewall-cmd --permanent --remove-source={}".format(ip)
-            Popen(rule.split(' '), stdout=PIPE, sterr=PIPE)
+            Popen(rule.split(' '), stdout=PIPE, stderr=PIPE)
+            time.sleep(.5)
             Popen(reload_fw.split(' '), stdout=PIPE, stderr=PIPE)
 
 
