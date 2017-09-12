@@ -176,12 +176,12 @@ def create_firewall_rule(distro, ip, ports=None):
                     rule_tcp = (
                      "firewall-cmd --permanent --add-rich-rule='rule "
                      "family=ipv4 source address={}/32 port port={} "
-                     "protocol=tcp accept'".format(ip, port[0], port[1]))
+                     "protocol=tcp accept'".format(ip, port[0]))
 
                     rule_udp = (
                       "firewall-cmd --permanent --add-rich-rule='rule "
                       "family=ipv4 source address={}/32 port port={} "
-                      "protocol=udp accept'".format(ip, port[0], port[1]))
+                      "protocol=udp accept'".format(ip, port[0]))
 
                     Popen(rule_tcp.split(' '), stdout=PIPE, stderr=PIPE)
                     Popen(rule_udp.split(' '), stdout=PIPE, stderr=PIPE)
@@ -189,7 +189,7 @@ def create_firewall_rule(distro, ip, ports=None):
                     rule = (
                      "firewall-cmd --permanent --add-rich-rule='rule "
                      "family=ipv4 source address={}/32 port port={} "
-                     "protocol={} accept'".format(ip, port[0]))
+                     "protocol={} accept'".format(ip, port[0], port[1]))
                     Popen(rule.split(' '), stdout=PIPE, stderr=PIPE)
         else:
             rule = (
@@ -224,12 +224,12 @@ def delete_firewall_rule(distro, ip, ports=None):
                     rule_tcp = (
                      "firewall-cmd --permanent --remove-rich-rule='rule "
                      "family=ipv4 source address={}/32 port port={} "
-                     "protocol=tcp accept'".format(ip, port[0], port[1]))
+                     "protocol=tcp accept'".format(ip, port[0]))
 
                     rule_udp = (
                       "firewall-cmd --permanent --remove-rich-rule='rule "
                       "family=ipv4 source address={}/32 port port={} "
-                      "protocol=udp accept'".format(ip, port[0], port[1]))
+                      "protocol=udp accept'".format(ip, port[0]))
 
                     Popen(rule_tcp.split(' '), stdout=PIPE, stderr=PIPE)
                     Popen(rule_udp.split(' '), stdout=PIPE, stderr=PIPE)
@@ -237,7 +237,7 @@ def delete_firewall_rule(distro, ip, ports=None):
                     rule = (
                      "firewall-cmd --permanent --add-rich-rule='rule "
                      "family=ipv4 source address={}/32 port port={} "
-                     "protocol={} accept'".format(ip, port[0]))
+                     "protocol={} accept'".format(ip, port[0], port[1]))
                     Popen(rule.split(' '), stdout=PIPE, stderr=PIPE)
         else:
             rule = (
