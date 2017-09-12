@@ -182,7 +182,8 @@ def create_firewall_rule(distro, ip, ports=None):
                       "firewall-cmd --permanent --add-rich-rule='rule "
                       "family=ipv4 source address={}/32 port port={} "
                       "protocol=udp accept'".format(ip, port[0]))
-
+                    print(rule_tcp)
+                    print(rule_udp)
                     Popen(rule_tcp.split(' '), stdout=PIPE, stderr=PIPE)
                     Popen(rule_udp.split(' '), stdout=PIPE, stderr=PIPE)
                 else:
@@ -190,11 +191,13 @@ def create_firewall_rule(distro, ip, ports=None):
                      "firewall-cmd --permanent --add-rich-rule='rule "
                      "family=ipv4 source address={}/32 port port={} "
                      "protocol={} accept'".format(ip, port[0], port[1]))
+                    print(rule)
                     Popen(rule.split(' '), stdout=PIPE, stderr=PIPE)
         else:
             rule = (
              "firewall-cmd --permanent --add-rich-rule='rule family=ipv4 "
              "source address={}/32 accept'".format(ip))
+            print(rule)
             Popen(rule.split(' '), stdout=PIPE, stderr=PIPE)
 
 
