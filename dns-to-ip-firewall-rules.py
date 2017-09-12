@@ -194,7 +194,7 @@ def create_firewall_rule(distro, ip, ports=None):
         else:
             rule = (
              "firewall-cmd --permanent --add-rich-rule='rule family=ipv4 "
-             "source address={}/32 '{}".format(ip))
+             "source address={}/32 accept'".format(ip))
             Popen(rule.split(' '), stdout=PIPE, stderr=PIPE)
 
 
@@ -242,7 +242,7 @@ def delete_firewall_rule(distro, ip, ports=None):
         else:
             rule = (
              "firewall-cmd --permanent --add-rich-rule='rule family=ipv4 "
-             "source address={}/32 '{}".format(ip))
+             "source address={}/32 accept'".format(ip))
             Popen(rule.split(' '), stdout=PIPE, stderr=PIPE)
 
 
