@@ -126,14 +126,14 @@ def get_current_ip(domain):
 
 def create_hostname_ip_log(domain, ip):
     """Create a file with the ip of the resolved domain."""
-    with open(domain, "w") as file:
-        file.write("{0}".format(ip))
+    with open(domain, "w") as f:
+     f.write("{0}".format(ip))
 
 
 def get_logged_ip(domain):
     """Get logged ip for requested domain."""
-    with open(domain, "r") as file:
-        logged_ip = file.read()
+    with open(domain, "r") as f:
+        logged_ip = f.read()
     return logged_ip
 
 
@@ -141,13 +141,13 @@ def log_script_messages(domain, current_ip, old_ip=None):
     """Log firewall rule creation and deletion."""
     date_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if old_ip:
-        with open("dns-to-ip-firewall.log", "a") as file:
-            file.write("{} - {} adding {} - removing {} from firewall\n"
+        with open("dns-to-ip-firewall.log", "a") as f:
+         f.write("{} - {} adding {} - removing {} from firewall\n"
                        .format(date_time, domain, current_ip, old_ip))
 
     else:
-        with open("dns-to-ip-firewall.log", "a") as file:
-            file.write("{} - New domain {}/{} added to the firewall\n".format(
+        with open("dns-to-ip-firewall.log", "a") as f:
+         f.write("{} - New domain {}/{} added to the firewall\n".format(
                 date_time, domain, current_ip))
 
 
