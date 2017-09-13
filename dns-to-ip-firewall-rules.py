@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Dynamic dns to ip address firewall rule creator.
 
 Resolve dynamic dns names into ips and automatically create/destroy
@@ -63,27 +63,27 @@ def main():
         {'name': 'theverge.com'},
         {'name': 'arstechnica.com'},
         {
-         'name': 'google.com',
-         'ports': [
-            (53, 'udp'),
-            (22, 'both'),
-            (80, 'tcp')
+            'name': 'google.com',
+            'ports': [
+                (53, 'udp'),
+                (22, 'both'),
+                (80, 'tcp')
             ]
         },
         {
-         'name': 'example.com',
-         'ports': [
-            (53, 'udp'),
-            (22, 'both'),
-            (80, 'tcp')
+            'name': 'example.com',
+            'ports': [
+                (53, 'udp'),
+                (22, 'both'),
+                (80, 'tcp')
             ]
         },
         {
-         'name': 'mangolassi.it',
-         'ports': [
-            (53, 'both'),
-            (443, 'tcp')
-         ]
+            'name': 'mangolassi.it',
+            'ports': [
+                (53, 'both'),
+                (443, 'tcp')
+            ]
         }
     ]
     # Getting linux distro
@@ -127,7 +127,7 @@ def get_current_ip(domain):
 def create_hostname_ip_log(domain, ip):
     """Create a file with the ip of the resolved domain."""
     with open(domain, "w") as f:
-     f.write("{0}".format(ip))
+        f.write("{0}".format(ip))
 
 
 def get_logged_ip(domain):
@@ -142,12 +142,12 @@ def log_script_messages(domain, current_ip, old_ip=None):
     date_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if old_ip:
         with open("dns-to-ip-firewall.log", "a") as f:
-         f.write("{} - {} adding {} - removing {} from firewall\n"
-                       .format(date_time, domain, current_ip, old_ip))
+            f.write("{} - {} adding {} - removing {} from firewall\n"
+                    .format(date_time, domain, current_ip, old_ip))
 
     else:
         with open("dns-to-ip-firewall.log", "a") as f:
-         f.write("{} - New domain {}/{} added to the firewall\n".format(
+            f.write("{} - New domain {}/{} added to the firewall\n".format(
                 date_time, domain, current_ip))
 
 
@@ -158,13 +158,13 @@ def create_firewall_rule(distro, ip, ports=None):
             for port in ports:
                 if port[1] == 'both':
                     Popen(
-                     ["ufw", "allow", "from", ip, "to", "any", "port",
-                      str(port[0])], stdout=PIPE, stderr=PIPE)
+                        ["ufw", "allow", "from", ip, "to", "any", "port",
+                         str(port[0])], stdout=PIPE, stderr=PIPE)
                 else:
                     Popen(
-                      ["ufw", "allow", "from", ip, "to", "any", "port",
-                       str(port[0]), "proto", port[1]],
-                      stdout=PIPE, stderr=PIPE)
+                        ["ufw", "allow", "from", ip, "to", "any", "port",
+                         str(port[0]), "proto", port[1]],
+                        stdout=PIPE, stderr=PIPE)
                 # ufw freaks out when adding rules too fast
                 time.sleep(.5)
         else:
@@ -174,28 +174,28 @@ def create_firewall_rule(distro, ip, ports=None):
             for port in ports:
                 if port[1] == 'both':
                     rule_tcp = (
-                     "firewall-cmd --permanent --add-rich-rule='rule "
-                     "family=ipv4 source address={}/32 port port={} "
-                     "protocol=tcp accept'".format(ip, port[0]))
+                        "firewall-cmd --permanent --add-rich-rule='rule "
+                        "family=ipv4 source address={}/32 port port={} "
+                        "protocol=tcp accept'".format(ip, port[0]))
 
                     rule_udp = (
-                      "firewall-cmd --permanent --add-rich-rule='rule "
-                      "family=ipv4 source address={}/32 port port={} "
-                      "protocol=udp accept'".format(ip, port[0]))
+                        "firewall-cmd --permanent --add-rich-rule='rule "
+                        "family=ipv4 source address={}/32 port port={} "
+                        "protocol=udp accept'".format(ip, port[0]))
                     Popen(rule_tcp, shell=True, stdout=PIPE, stderr=PIPE)
                     time.sleep(.5)
                     Popen(rule_udp, shell=True, stdout=PIPE, stderr=PIPE)
                 else:
                     rule = (
-                     "firewall-cmd --permanent --add-rich-rule='rule "
-                     "family=ipv4 source address={}/32 port port={} "
-                     "protocol={} accept'".format(ip, port[0], port[1]))
+                        "firewall-cmd --permanent --add-rich-rule='rule "
+                        "family=ipv4 source address={}/32 port port={} "
+                        "protocol={} accept'".format(ip, port[0], port[1]))
                     Popen(rule, shell=True, stdout=PIPE, stderr=PIPE)
                 time.sleep(.5)
         else:
             rule = (
-             "firewall-cmd --permanent --add-rich-rule='rule family=ipv4 "
-             "source address={}/32 accept'".format(ip))
+                "firewall-cmd --permanent --add-rich-rule='rule family=ipv4 "
+                "source address={}/32 accept'".format(ip))
             Popen(rule, shell=True, stdout=PIPE, stderr=PIPE)
 
 
@@ -206,13 +206,13 @@ def delete_firewall_rule(distro, ip, ports=None):
             for port in ports:
                 if port[1] == 'both':
                     Popen(
-                     ["ufw", "delete", "allow", "from", ip, "to", "any",
-                      "port", str(port[0])], stdout=PIPE, stderr=PIPE)
+                        ["ufw", "delete", "allow", "from", ip, "to", "any",
+                         "port", str(port[0])], stdout=PIPE, stderr=PIPE)
                 else:
                     Popen(
-                      ["ufw", "delete", "allow", "from", ip, "to", "any",
-                       "port", str(port[0]), "proto", port[1]], stdout=PIPE,
-                      stderr=PIPE)
+                        ["ufw", "delete", "allow", "from", ip, "to", "any",
+                         "port", str(port[0]), "proto", port[1]], stdout=PIPE,
+                        stderr=PIPE)
                 # ufw freaks out when deleting rules too fast
                 time.sleep(.5)
         else:
@@ -223,29 +223,29 @@ def delete_firewall_rule(distro, ip, ports=None):
             for port in ports:
                 if port[1] == 'both':
                     rule_tcp = (
-                     "firewall-cmd --permanent --remove-rich-rule='rule "
-                     "family=ipv4 source address={}/32 port port={} "
-                     "protocol=tcp accept'".format(ip, port[0]))
+                        "firewall-cmd --permanent --remove-rich-rule='rule "
+                        "family=ipv4 source address={}/32 port port={} "
+                        "protocol=tcp accept'".format(ip, port[0]))
 
                     rule_udp = (
-                      "firewall-cmd --permanent --remove-rich-rule='rule "
-                      "family=ipv4 source address={}/32 port port={} "
-                      "protocol=udp accept'".format(ip, port[0]))
+                        "firewall-cmd --permanent --remove-rich-rule='rule "
+                        "family=ipv4 source address={}/32 port port={} "
+                        "protocol=udp accept'".format(ip, port[0]))
 
                     Popen(rule_tcp, shell=True, stdout=PIPE, stderr=PIPE)
                     time.sleep(.5)
                     Popen(rule_udp, shell=True, stdout=PIPE, stderr=PIPE)
                 else:
                     rule = (
-                     "firewall-cmd --permanent --remove-rich-rule='rule "
-                     "family=ipv4 source address={}/32 port port={} "
-                     "protocol={} accept'".format(ip, port[0], port[1]))
+                        "firewall-cmd --permanent --remove-rich-rule='rule "
+                        "family=ipv4 source address={}/32 port port={} "
+                        "protocol={} accept'".format(ip, port[0], port[1]))
                     Popen(rule, shell=True, stdout=PIPE, stderr=PIPE)
                 time.sleep(.5)
         else:
             rule = (
-             "firewall-cmd --permanent --remove-rich-rule='rule family=ipv4 "
-             "source address={}/32 accept'".format(ip))
+                "firewall-cmd --permanent --remove-rich-rule='rule family=ipv4 "
+                "source address={}/32 accept'".format(ip))
             Popen(rule, shell=True, stdout=PIPE, stderr=PIPE)
 
 
