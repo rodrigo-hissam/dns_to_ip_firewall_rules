@@ -120,8 +120,8 @@ def get_current_ip(domain):
     response = response.communicate()[0].decode("utf-8")
     response = re.search('^.+?(?=\\n)', response)
     response = response.group(0)
-    ip = re.search('\d+.\d+.\d+.\d+$', response)
-    return ip.group(0)
+    ip_address = re.search('\d+.\d+.\d+.\d+$', response)
+    return ip_address.group(0)
 
 
 def create_hostname_ip_log(domain, ip):
